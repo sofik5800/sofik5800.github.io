@@ -1,37 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Google Login</title>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-</head>
-<body style="text-align:center; padding-top:100px; font-family:sans-serif;">
+    <title>Приглашение в Дом Софика</title>
 
-<h1>Войти через Google</h1>
+      <style>
+          body {
+                margin: 0;
+                      font-family: Arial, sans-serif;
+                            background: #111;
+                                  color: white;
+                                        text-align: center;
+                                            }
 
-<div id="g_id_onload"
-     data-client_id="526817883934-ochpl3lrl1uvsuuuffeaogm4dsmgbar5.apps.googleusercontent.com"
-     data-callback="handleCredentialResponse">
-</div>
+                                                header {
+                                                      padding: 20px;
+                                                            font-size: 24px;
+                                                                  background: #1a1a1a;
+                                                                      }
 
-<div class="g_id_signin"></div>
+                                                                          .container {
+                                                                                padding: 20px;
+                                                                                    }
 
-<script>
-function handleCredentialResponse(response) {
-    const data = parseJwt(response.credential);
-    alert("Email: " + data.email);
-    console.log(data);
-}
+                                                                                        iframe {
+                                                                                              border: none;
+                                                                                                    width: 100%;
+                                                                                                          height: 900px;
+                                                                                                                border-radius: 10px;
+                                                                                                                      background: white;
+                                                                                                                          }
 
-function parseJwt(token) {
-    let base64Url = token.split('.')[1];
-    let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    let jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
-    return JSON.parse(jsonPayload);
-}
-</script>
+                                                                                                                              .btn {
+                                                                                                                                    margin-top: 20px;
+                                                                                                                                          padding: 12px 20px;
+                                                                                                                                                background: #00ff88;
+                                                                                                                                                      border: none;
+                                                                                                                                                            border-radius: 8px;
+                                                                                                                                                                  font-size: 16px;
+                                                                                                                                                                        cursor: pointer;
+                                                                                                                                                                            }
+                                                                                                                                                                              </style>
+                                                                                                                                                                              </head>
 
-</body>
-</html>
+                                                                                                                                                                              <body>
+
+                                                                                                                                                                              <header>
+                                                                                                                                                                                Sofo Invite
+                                                                                                                                                                                </header>
+
+                                                                                                                                                                                <div class="container">
+                                                                                                                                                                                  <h2>Оставь свою почту</h2>
+
+                                                                                                                                                                                    <iframe 
+                                                                                                                                                                                        src="https://docs.google.com/forms/d/e/1FAIpQLSfPzCG9JrlRdrK-NZi11J2z9NzwHUQnBbIbJglFkdjozs71EA/viewform?embedded=true">
+                                                                                                                                                                                            Загрузка…
+                                                                                                                                                                                              </iframe>
+
+                                                                                                                                                                                              </div>
+
+                                                                                                                                                                                              </body>
+                                                                                                                                                                                              </html>
